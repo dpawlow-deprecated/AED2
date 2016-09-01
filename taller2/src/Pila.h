@@ -116,9 +116,10 @@ Pila<T>::Pila(const Pila& otra)
     }
 
     delete aux;*/
+    /*
     for (size_t i = 0; i < otra.tamanio(); i++) {
-        this.apilar(desapilar)
-    }
+        this.apilar(desapilar);
+    }*/
 
 
 }
@@ -128,7 +129,7 @@ Pila<T>::~Pila()
 {
     Nodo* aux = this->tope_;
 
-    for (unsigned int i = 0; i < this->tam; i++){
+    for (unsigned int i = 0; i < this->tamanio_; i++){
         Nodo* eliminado = aux;
         aux = aux->sig;
         delete eliminado;
@@ -141,8 +142,8 @@ Pila<T>::~Pila()
 template <typename T>
 void Pila<T>::apilar(const T& elem)
 {
-    Nodo* nuevo = new Nodo;
-    nuevo->elem = elem;
+    Nodo* nuevo = new Nodo(elem);
+
     nuevo->sig = this->tope_;
     this->tamanio_++;
 
@@ -152,14 +153,15 @@ void Pila<T>::apilar(const T& elem)
 template <typename T>
 void Pila<T>::desapilar()
 {
-    T elim = this->tope_->elem;
+    T* elim = this->tope_;
+    T elemElim = this->tope_->elem;
 
-    Nodo* aux = new Nodo;
-    aux = this->tope_;
-    this->tope_ = this->tope_->sig;
-    delete aux;
+    this->tope_->elem = this->tope_->sig->elem;
+    this->tope_->sig = this->tope_->sig->sig;
+
+    delete *elim;
     this->tamanio_--;
-    return elim;
+    return elemElim;
 }
 
 template <typename T>
@@ -194,8 +196,8 @@ Pila<T>& Pila<T>::operator = (const Pila& otra)
 
 template <typename T>
 void Pila<T>::mostrar(std::ostream& os) const{
-    Nodo* aux = new Nodo;
-    aux = this->tope_;
+    Nodo* aux = new Nodo(this->tope_->elem);
+
     os << "[";
     for (int i = 0; i < this->tamanio_; i++) {
         os << aux->elem;
@@ -209,6 +211,7 @@ void Pila<T>::mostrar(std::ostream& os) const{
 template <typename T>
 std::ostream& operator << (std::ostream& os, const Pila<T>& pila)
 {
-  pila.mostrar(os);
-  return os;
+    std::cout << "/* message */" << std::endl;
+    pila.mostrar(os);
+    return os;
 }

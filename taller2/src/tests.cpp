@@ -12,7 +12,9 @@
 template<typename T>
 std::string to_s(const T& m) {
  	std::ostringstream os;
+    std::cout << "1" << std::endl;
 	os << m;
+    std::cout << "2" << std::endl;
 	return os.str();
 }
 
