@@ -197,7 +197,7 @@ Pila<T>& Pila<T>::operator = (const Pila& otra)
 template <typename T>
 void Pila<T>::mostrar(std::ostream& os) const{
     Nodo* aux = new Nodo(this->tope_->elem);
-
+    //esto no tiene sentido poruqe no funciona la asignacion
     os << "[";
     for (int i = 0; i < this->tamanio_; i++) {
         os << aux->elem;
