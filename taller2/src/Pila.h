@@ -184,14 +184,14 @@ Pila<T>& Pila<T>::operator = (const Pila& otra)
         p.desapilar();
     }
     for (int i = 0; i < otra.tamanio(); i++) {
-        p->apilar(aux.tope());
+        p.apilar(aux.tope());
         aux.desapilar();
     }
 
     return p;
 }
 
-template <typename T>
+/*template <typename T>
 void Pila<T>::mostrar(std::ostream& os) const{
 
     Pila<T> p;
@@ -203,13 +203,29 @@ void Pila<T>::mostrar(std::ostream& os) const{
     }
     os << p.tope();
     os << "]";
-}
+}*/
 
 
 template <typename T>
 std::ostream& operator << (std::ostream& os, const Pila<T>& pila)
 {
-    std::cout << "/* message */" << std::endl;
-    pila.mostrar(os);
+    /*std::cout << "hola" << std::endl;
+    pila.mostrar(os);*/
+    Pila<T> p(pila);
+    //p = pila;
+    os << "[";
+    /*for (int i = 0; i < pila.tamanio()-1; i++) {
+        os << p.tope() << ", ";
+        p.desapilar();
+    }
+    os << p.tope();*/
+    while (p.tamanio() > 0) {
+        os << p.tope();
+        p.desapilar();
+        if (p.tamanio() > 1) {
+            os << ", ";
+        }
+    }
+    os << "]";
     return os;
 }
