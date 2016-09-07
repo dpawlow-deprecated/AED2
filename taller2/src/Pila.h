@@ -100,28 +100,17 @@ Pila<T>::Pila()
 
 template <typename T>
 Pila<T>::Pila(const Pila& otra)
-{   /*
-    Nodo* copiAux = new Nodo;
-    this->tope_->elem = otra->tope_->elem;
-
-    this->tope_->sig = copiAux;
-    Nodo* aux = otra->tope_->sig;
-
-    for (size_t i = 0; i < otra->tamanio_; i++) {
-        Nodo* siguiente = new Nodo;
-
-        siguiente->elem = aux;
-
-        p->tamanio_++;
+{
+    Pila<T> p = otra;
+    Pila<T> aux;
+    for (int i = 0; i < otra.tamanio(); i++) {
+        aux.apilar(p.tope());
+        p.desapilar();
     }
-
-    delete aux;*/
-    /*
-    for (size_t i = 0; i < otra.tamanio(); i++) {
-        this.apilar(desapilar);
-    }*/
-
-
+    for (int i = 0; i < otra.tamanio(); i++) {
+        this->apilar(aux.tope());
+        aux.desapilar();
+    }
 }
 
 template <typename T>
@@ -153,15 +142,12 @@ void Pila<T>::apilar(const T& elem)
 template <typename T>
 void Pila<T>::desapilar()
 {
-    T* elim = this->tope_;
-    T elemElim = this->tope_->elem;
-
+    Nodo* elim = this->tope_;
     this->tope_->elem = this->tope_->sig->elem;
     this->tope_->sig = this->tope_->sig->sig;
 
-    delete *elim;
+    delete elim;
     this->tamanio_--;
-    return elemElim;
 }
 
 template <typename T>
@@ -191,20 +177,32 @@ aed2::Nat Pila<T>::tamanio() const
 template <typename T>
 Pila<T>& Pila<T>::operator = (const Pila& otra)
 {
-  // TODO completar...
+    Pila<T> p = otra;
+    Pila<T> aux;
+    for (int i = 0; i < otra.tamanio(); i++) {
+        aux.apilar(p.tope());
+        p.desapilar();
+    }
+    for (int i = 0; i < otra.tamanio(); i++) {
+        p->apilar(aux.tope());
+        aux.desapilar();
+    }
+
+    return p;
 }
 
 template <typename T>
 void Pila<T>::mostrar(std::ostream& os) const{
-    Nodo* aux = new Nodo(this->tope_->elem);
-    //esto no tiene sentido poruqe no funciona la asignacion
+
+    Pila<T> p;
+    p = this;
     os << "[";
-    for (int i = 0; i < this->tamanio_; i++) {
-        os << aux->elem;
-        aux = aux->sig;
+    for (int i = 0; i < this->tamanio()-1; i++) {
+        os << p.tope() << ", ";
+        p.desapilar();
     }
+    os << p.tope();
     os << "]";
-    delete aux;
 }
 
 
