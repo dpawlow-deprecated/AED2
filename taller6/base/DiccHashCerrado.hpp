@@ -51,6 +51,11 @@ private:
 	Nat fn_hash (const String& str) const {
 
 		Nat hash = 0;
+
+		for (int i = 0; i < str.size(); i++) {
+			hash *= str[i];
+		}
+
 		hash = hash % _tam;
 
 		return hash;
@@ -62,8 +67,24 @@ private:
 
 
 	void redimensionarTabla(){
-		
+
+		_tam = 2*_tam;
+
+		Lista<TElem> tablaNueva = new Lista<TElem>[_tam];
+
+		typename Lista<TElem>::Iterador it;
+
+
+		for(Nat i=0; i < _tam; i++){
+			for(it = _tabla[i].CrearIt(); it.HaySiguiente(); it.Avanzar()){
+				tablaNueva.Definir(it.Siguiente().clave, it.Siguiente().signif);
+			}
+		}
+
+		delete this->_tabla;
+		this->_tabla = tablaNueva;
 	}
+
 
 };
 
