@@ -62,8 +62,7 @@ private:
 
 
 	void redimensionarTabla(){
-		assert(false);
-		// TODO
+		
 	}
 
 };
@@ -88,10 +87,10 @@ DiccHashCerrado<S>::~DiccHashCerrado() {
 template<class S>
 bool DiccHashCerrado<S>::Definido(const K& clave) const {
 
-	Lista<TElem> ls = _tabla[fn_hash(clave)];
+	typename Lista<TElem>::Iterador it;
 
-	for (int i = 0; i < ls.Longitud(); i++) {
-		if (ls[i].clave == clave){
+	for (it = _tabla[fn_hash(clave)].CrearIt(); it.HaySiguiente(); it.Avanzar()) {
+		if (it.Siguiente().clave == clave){
 			return true;
 		}
 	}
@@ -107,11 +106,19 @@ void DiccHashCerrado<S>::Definir(const K& clave, const S& significado) {
 		redimensionarTabla();
 	}
 
-	if(!this->Definido(clave)){
+	typename Lista<TElem>::Iterador it;
 
-		TElem e(clave, significado);
-		_tabla[fn_hash(clave)].AgregarAtras(e);
+	for (it = _tabla[fn_hash(clave)].CrearIt(); it.HaySiguiente(); it.Avanzar()) {
+		if (it.Siguiente().clave == clave){
+			it.Siguiente().signif = significado;
+			return;
+		}
 	}
+
+	TElem e(clave, significado);
+	_tabla[fn_hash(clave)].AgregarAtras(e);
+	_cant_elems++;
+
 }
 
 
@@ -120,9 +127,12 @@ S& DiccHashCerrado<S>::Significado(const K& clave) {
 
 	Lista<TElem> ls = _tabla[fn_hash(clave)];
 
-	for (int i = 0; i < ls.Longitud(); i++) {
-		if (ls[i].clave == clave){
-			return ls[i].signif;
+	typename Lista<TElem>::Iterador it;
+
+	for (it = _tabla[fn_hash(clave)].CrearIt(); it.HaySiguiente(); it.Avanzar()) {
+		if (it.Siguiente().clave == clave){
+			S ret = it.Siguiente().signif;
+			return ret;
 		}
 	}
 
@@ -132,10 +142,19 @@ S& DiccHashCerrado<S>::Significado(const K& clave) {
 template<class S>
 void DiccHashCerrado<S>::Borrar(const K& clave) {
 
-	assert( Definido(clave) );
+	Lista<TElem> ls = _tabla[fn_hash(clave)];
 
-	//TODO
+	typename Lista<TElem>::Iterador it;
+
+	for (it = _tabla[fn_hash(clave)].CrearIt(); it.HaySiguiente(); it.Avanzar()) {
+		if (it.Siguiente().clave == clave){
+			it.EliminarSiguiente();
+			_cant_elems--;
+		}
+	}
+
 }
+
 
 template<class S>
 Nat DiccHashCerrado<S>::CantClaves() const {
