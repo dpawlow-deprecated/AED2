@@ -50,10 +50,11 @@ private:
 
 	Nat fn_hash (const String& str) const {
 
-		Nat hash = 0;
+		Nat hash = 7;
 
 		for (int i = 0; i < str.size(); i++) {
-			hash *= str[i];
+			hash *= 31;
+			hash += charToNat(str[i]);
 		}
 
 		hash = hash % _tam;
@@ -68,21 +69,23 @@ private:
 
 	void redimensionarTabla(){
 
-		_tam = 2*_tam;
+		Nat tamViejo = _tam;
+		_tam *= 2;
 
-		Lista<TElem> tablaNueva = new Lista<TElem>[_tam];
+		Lista<TElem>* tablaVieja = new Lista<TElem>[_tam];
+		tablaVieja = _tabla;
 
 		typename Lista<TElem>::Iterador it;
 
-
-		for(Nat i=0; i < _tam; i++){
+		for(Nat i=0; i < tamViejo; i++){
 			for(it = _tabla[i].CrearIt(); it.HaySiguiente(); it.Avanzar()){
-				tablaNueva.Definir(it.Siguiente().clave, it.Siguiente().signif);
+				Definir(it.Siguiente().clave, it.Siguiente().signif);
 			}
 		}
 
-		delete this->_tabla;
-		this->_tabla = tablaNueva;
+
+		delete tablaVieja;
+		//this->_tabla = tablaNueva;
 	}
 
 
