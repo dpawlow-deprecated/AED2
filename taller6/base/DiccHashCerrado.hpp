@@ -72,19 +72,18 @@ private:
 		Nat tamViejo = _tam;
 		_tam *= 2;
 
-		Lista<TElem>* tablaVieja = new Lista<TElem>[_tam];
-		tablaVieja = _tabla;
+		Lista<TElem>* tablaNueva = new Lista<TElem>[_tam];
 
 		typename Lista<TElem>::Iterador it;
 
 		for(Nat i=0; i < tamViejo; i++){
 			for(it = _tabla[i].CrearIt(); it.HaySiguiente(); it.Avanzar()){
-				Definir(it.Siguiente().clave, it.Siguiente().signif);
+				tablaNueva[fn_hash(it.Siguiente().clave)].AgregarAtras(it.Siguiente().signif);
 			}
 		}
 
+		_tabla = tablaNueva;
 
-		delete tablaVieja;
 		//this->_tabla = tablaNueva;
 	}
 
